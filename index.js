@@ -192,7 +192,7 @@ let memoryWall = [
   },
   {
     id: "2",
-    title: "מלחמת יום כיפור",
+    title: "יום כיפור",
     about: `
      ילן במלחמת יום הכיפורים פרצה ביום הכיפורים ה'תשל"ד, 6 באוקטובר 1973,
       בהתקפת קואליציה של צבאות מדינות ערביות נגד ישראל, בהובלתן של סוריה ומצרים, שנתמכו על ידי חילות משלוח מארצות ערב,
@@ -459,6 +459,40 @@ app.get("/api/users", (req, res) => {
   res.json(users);
 });
 
+//get title
+app.get("/api/getMemoryWallById/:id/title", (req, res) => {
+  const memoryWallData = memoryWall.find((m) => m.id === req.params.id);
+  res.json(memoryWallData.title);
+});
+//put title
+app.put("/api/getMemoryWallById/:id/title", (req, res) => {
+  const memoryWallData = memoryWall.find((m) => m.id === req.params.id);
+  memoryWallData.title = req.body.title;
+  console.log(memoryWallData.title);
+
+  res.json(memoryWallData.title);
+});
+
+//get about
+app.get("/api/getMemoryWallById/:id/about", (req, res) => {
+  const memoryWallData = memoryWall.find((m) => m.id === req.params.id);
+  res.json(memoryWallData.about);
+});
+
+//put about
+app.put("/api/getMemoryWallById/:id/about", (req, res) => {
+  const memoryWallData = memoryWall.find((m) => m.id === req.params.id);
+  memoryWallData.about = req.body.aboutText;
+  res.json(memoryWallData.about);
+});
+
+//delete about
+app.delete("/api/getMemoryWallById/:id/about", (req, res) => {
+  const memoryWallData = memoryWall.find((m) => m.id === req.params.id);
+  memoryWallData.about = "";
+  res.json(memoryWallData.about);
+});
+
 //get highlightsNews
 app.get("/api/getMemoryWallById/:id/highlightsNews", (req, res) => {
   const memoryWall = memoryWall.find((m) => m.id === req.params.id);
@@ -468,12 +502,23 @@ app.get("/api/getMemoryWallById/:id/highlightsNews", (req, res) => {
 //post highlightsNews
 app.post("/api/getMemoryWallById/:id/highlightsNews", (req, res) => {
   const memoryWallData = memoryWall.find((m) => m.id === req.params.id);
-  const newHighlight= req.body;
+  const newHighlight = req.body;
   memoryWallData.highlightsNews.push(newHighlight);
   res.json(memoryWallData.highlightsNews);
 });
 
-
+//put highlightsNews
+app.put("/api/getMemoryWallById/:id/highlightsNews/:id", (req, res) => {
+  const memoryWallData = memoryWall.find((m) => m.id === req.params.id);
+  const highlight = memoryWallData.highlightsNews.find(
+    (h) => h.id === req.params.id
+  );
+  highlight.imagePath = req.body.imagePath;
+  highlight.date = req.body.date;
+  highlight.title = req.body.title;
+  highlight.text = req.body.text;
+  res.json(memoryWallData.highlightsNews);
+});
 
 //get deceasedsInfo
 app.get("/api/getMemoryWallById/:id/deceasedsInfo", (req, res) => {
@@ -486,8 +531,6 @@ app.get("/api/getMemoryWallById/:id/sliderUpdates", (req, res) => {
   const memoryWall = memoryWall.find((m) => m.id === req.params.id);
   res.json(memoryWall.sliderUpdates);
 });
-
-
 
 //get user by id
 app.get("/api/users/:id", (req, res) => {
